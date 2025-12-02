@@ -1,0 +1,4 @@
+# Terraform 관련 파일 무시
+.terraform/
+*.tfstate
+*.tfstate.backup
