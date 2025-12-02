@@ -90,13 +90,13 @@ resource "aws_db_instance" "default" {
   allocated_storage      = 20
   engine                 = "mysql"
   engine_version         = "8.0"
-  instance_class         = "db.t3.micro" # 프리티어/크레딧 호환
+  instance_class         = "db.t3.micro"
   db_name                = "mydb"
   username               = "admin"
   password               = var.db_password
   parameter_group_name   = "default.mysql8.0"
-  skip_final_snapshot    = true          # 종료 시 스냅샷 생성 안함 (빠른 삭제)
-  publicly_accessible    = false         # 외부 접근 차단
+  skip_final_snapshot    = true  # 종료 시 스냅샷 생성 안함 (빠른 삭제)
+  publicly_accessible    = false # 외부 접근 차단
   vpc_security_group_ids = [aws_security_group.db_sg.id]
 }
 
@@ -143,5 +143,17 @@ resource "aws_instance" "web" {
 
   tags = {
     Name = "My-Spring-Server"
+  }
+}
+
+# -------------------------------------------------------------
+# 5. 탄력적 IP (Elastic IP) - 고정 IP 할당
+# -------------------------------------------------------------
+resource "aws_eip" "web_eip" {
+  instance = aws_instance.web.id
+  domain   = "vpc"
+
+  tags = {
+    Name = "My-Web-EIP"
   }
 }
